@@ -2,26 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quotes_app/modules/helpers/quote_helper.dart';
+import 'package:quotes_app/modules/screens/quote_page/controller/bg_controller.dart';
 import 'package:quotes_app/modules/screens/quote_page/controller/font_controller.dart';
+import 'package:quotes_app/modules/screens/quote_page/model/bg_model.dart';
 import 'package:quotes_app/modules/screens/quote_page/model/font_model.dart';
 import 'package:quotes_app/modules/utils/fonts.dart';
 
 class QuoteScreen extends StatelessWidget {
-  const QuoteScreen({super.key});
+  const QuoteScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     FontController fontController = Get.put(FontController());
+    BgController bgController = Get.put(BgController());
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         GetBuilder<FontController>(
           builder: (controller) {
             return Scaffold(
-              backgroundColor:
-                  Color(int.parse(fontController.fontModel.bgColor)),
+              backgroundColor: Color(int.parse(bgController.bgModel.bgColor)),
               body: FutureBuilder(
                 future: QuoteHelper.quoteHelper.fetchData(),
                 builder: (context, snapshot) {
@@ -49,7 +51,7 @@ class QuoteScreen extends StatelessWidget {
                                 snapshot.data![index].quote,
                                 style: GoogleFonts.getFont(
                                   fontController.fontModel.font,
-                                  fontSize: 22,
+                                  fontSize: 32,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -111,59 +113,90 @@ class QuoteScreen extends StatelessWidget {
                     width: w / 8,
                     child: FloatingActionButton(
                       onPressed: () {
-                        Get.bottomSheet(
-                          BottomSheet(
-                            dragHandleColor: Colors.white,
-                            enableDrag: true,
-                            shadowColor: Colors.white,
-                            showDragHandle: true,
-                            builder: (context) {
-                              return GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisSpacing: 10,
-                                        mainAxisSpacing: 10,
-                                        crossAxisCount: 3),
-                                itemCount: allFonts.length,
-                                itemBuilder: (context, index) {
-                                  List<FontModel> font = allFonts
-                                      .map(
-                                        (e) => FontModel.fromGoogle(data: e),
-                                      )
-                                      .toList();
-                                  return GestureDetector(
-                                    onTap: () {
-                                      fontController.changeFont(
-                                          font[index].font,
-                                          font[index].bgColor);
-                                      Get.back();
-                                    },
-                                    child: Container(
-                                      margin:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: Color(
-                                          int.parse(
-                                            font[index].bgColor.toString(),
+                        // ...
+
+                        // Get.bottomSheet(
+                        //   BottomSheet(
+                        //     dragHandleColor: Colors.white,
+                        //     enableDrag: true,
+                        //     shadowColor: Colors.white,
+                        //     showDragHandle: true,
+                        //     builder: (context) {
+                        //       return
+                        //     },
+                        //     onClosing: () {},
+                        //   ),
+                        // );
+                        showBottomSheet(
+                          enableDrag: true,
+                          context: context,
+                          builder: (context) => GestureDetector(
+                            onTap: () {},
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: allFonts.length,
+                              itemBuilder: (context, index) {
+                                List<FontModel> fonts = allFonts
+                                    .map((e) => FontModel.fromGoogle(data: e))
+                                    .toList();
+                                List<BgModel> bgs = allFonts
+                                    .map((e) => BgModel.fromColor(data: e))
+                                    .toList();
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    fontController
+                                        .changeFont(fonts[index].font);
+                                    Get.back();
+                                  },
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.only(left: 10, right: 10),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: h / 8,
+                                          width: w / 4,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Abc",
+                                            style: GoogleFonts.getFont(
+                                              fonts[index].font,
+                                              fontSize: 26,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      child: Text(
-                                        "Abc",
-                                        style: GoogleFonts.getFont(
-                                          font[index].font.toString(),
-                                          fontSize: 18,
+                                        SizedBox(height: 8),
+                                        Container(
+                                          height: h / 8,
+                                          width: w / 4,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                              width: 2,
+                                            ),
+                                            color: Color(
+                                                int.parse(bgs[index].bgColor)),
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  );
-                                },
-                              );
-                            },
-                            onClosing: () {},
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         );
+// ...
                       },
                       elevation: 0,
                       child: const Icon(

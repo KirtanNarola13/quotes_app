@@ -1,10 +1,9 @@
 class FontModel {
   String font;
-  String bgColor;
 
-  FontModel({required this.font, required this.bgColor});
+  FontModel({required this.font});
 
   factory FontModel.fromGoogle({required Map data}) {
-    return FontModel(font: data['font'], bgColor: data['bgColor']);
+    return FontModel(font: data['font']);
   }
 }
