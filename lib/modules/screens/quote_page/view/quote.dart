@@ -55,7 +55,7 @@ class QuoteScreen extends StatelessWidget {
                                     snapshot.data![index].quote,
                                     style: GoogleFonts.getFont(
                                       fontController.fontModel.font,
-                                      fontSize: 26,
+                                      fontSize: 23,
                                       fontWeight: FontWeight.w500,
                                       letterSpacing: 2,
                                     ),
@@ -101,7 +101,7 @@ class QuoteScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              SizedBox(
                 height: h / 18,
                 width: w / 4,
                 child: FloatingActionButton.extended(
