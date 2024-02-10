@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,7 +22,7 @@ class QuoteScreen extends StatelessWidget {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        GetBuilder<FontController>(
+        GetBuilder<BgController>(
           builder: (controller) {
             return Scaffold(
               backgroundColor: Color(int.parse(bgController.bgModel.bgColor)),
@@ -42,19 +44,25 @@ class QuoteScreen extends StatelessWidget {
                             SizedBox(
                               height: h / 50,
                             ),
-                            Container(
-                              color: Colors.transparent,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(20),
-                              height: h / 2,
-                              child: Text(
-                                snapshot.data![index].quote,
-                                style: GoogleFonts.getFont(
-                                  fontController.fontModel.font,
-                                  fontSize: 32,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
+                            GetBuilder<FontController>(
+                              builder: (controller) {
+                                return Container(
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(20),
+                                  height: h / 2,
+                                  child: Text(
+                                    snapshot.data![index].quote,
+                                    style: GoogleFonts.getFont(
+                                      fontController.fontModel.font,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: 2,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                );
+                              },
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -106,125 +114,179 @@ class QuoteScreen extends StatelessWidget {
                   label: const Text("Category"),
                 ),
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    height: h / 18,
-                    width: w / 8,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        // ...
-
-                        // Get.bottomSheet(
-                        //   BottomSheet(
-                        //     dragHandleColor: Colors.white,
-                        //     enableDrag: true,
-                        //     shadowColor: Colors.white,
-                        //     showDragHandle: true,
-                        //     builder: (context) {
-                        //       return
-                        //     },
-                        //     onClosing: () {},
-                        //   ),
-                        // );
-                        showBottomSheet(
-                          enableDrag: true,
-                          context: context,
-                          builder: (context) => GestureDetector(
-                            onTap: () {},
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: allFonts.length,
-                              itemBuilder: (context, index) {
-                                List<FontModel> fonts = allFonts
-                                    .map((e) => FontModel.fromGoogle(data: e))
-                                    .toList();
-                                List<BgModel> bgs = allFonts
-                                    .map((e) => BgModel.fromColor(data: e))
-                                    .toList();
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    fontController
-                                        .changeFont(fonts[index].font);
-                                    Get.back();
-                                  },
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.only(left: 10, right: 10),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: h / 8,
-                                          width: w / 4,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            border: Border.all(
-                                              width: 2,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            "Abc",
-                                            style: GoogleFonts.getFont(
-                                              fonts[index].font,
-                                              fontSize: 26,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 8),
-                                        Container(
-                                          height: h / 8,
-                                          width: w / 4,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            border: Border.all(
-                                              width: 2,
-                                            ),
-                                            color: Color(
-                                                int.parse(bgs[index].bgColor)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+              SizedBox(
+                height: h / 18,
+                width: w / 8,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          padding: const EdgeInsets.only(
+                            top: 20,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "FONT STYLE",
+                                  style: TextStyle(
+                                    fontSize: 18,
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: allFonts.length,
+                                  itemBuilder: (context, index) {
+                                    List<FontModel> fonts = allFonts
+                                        .map((e) =>
+                                            FontModel.fromGoogle(data: e))
+                                        .toList();
+                                    return GestureDetector(
+                                      onTap: () {
+                                        fontController
+                                            .changeFont(fonts[index].font);
+                                        Get.back();
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.all(5),
+                                        height: h / 100,
+                                        width: w / 5,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Abc",
+                                          style: GoogleFonts.getFont(
+                                            fonts[index].font,
+                                            fontSize: 26,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height: h / 30,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "BACKGROUND COLOR",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: allFonts.length,
+                                  itemBuilder: (context, index) {
+                                    List<BgModel> bg = allFonts
+                                        .map((e) => BgModel.fromColor(data: e))
+                                        .toList();
+                                    return GestureDetector(
+                                      onTap: () {
+                                        bgController
+                                            .changeColor(bg[index].bgColor);
+                                        log(bgController.bgModel.bgColor);
+                                        Get.back();
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.all(5),
+                                        height: h / 100,
+                                        width: w / 5,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          color: Color(
+                                              int.parse(bg[index].bgColor)),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height: h / 30,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "BACKGROUND COLOR",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: allFonts.length,
+                                  itemBuilder: (context, index) {
+                                    List<FontModel> fonts = allFonts
+                                        .map((e) =>
+                                            FontModel.fromGoogle(data: e))
+                                        .toList();
+                                    return GestureDetector(
+                                      onTap: () {
+                                        fontController
+                                            .changeFont(fonts[index].font);
+                                        Get.back();
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.all(5),
+                                        height: h / 100,
+                                        width: w / 5,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Abc",
+                                          style: GoogleFonts.getFont(
+                                            fonts[index].font,
+                                            fontSize: 26,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height: h / 200,
+                              ),
+                            ],
                           ),
                         );
-// ...
                       },
-                      elevation: 0,
-                      child: const Icon(
-                        Icons.format_paint_outlined,
-                        size: 18,
-                      ),
-                    ),
+                    );
+                  },
+                  elevation: 0,
+                  child: const Icon(
+                    Icons.format_paint_outlined,
+                    size: 18,
                   ),
-                  SizedBox(
-                    width: w / 80,
-                  ),
-                  Container(
-                    height: h / 18,
-                    width: w / 8,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        Get.changeTheme(Get.isDarkMode
-                            ? ThemeData.light()
-                            : ThemeData.dark());
-                      },
-                      elevation: 0,
-                      child: const Icon(
-                        Icons.sunny,
-                        size: 18,
-                      ),
-                    ),
-                  )
-                ],
+                ),
               ),
             ],
           ),

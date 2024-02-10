@@ -8,7 +8,7 @@ void main() {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: Colors.white,
+        colorSchemeSeed: Colors.black,
       ),
       getPages: [
         GetPage(name: '/', page: () => const QuoteScreen()),
