@@ -1,13 +1,16 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quotes_app/modules/helpers/db_helper.dart';
 import 'package:quotes_app/modules/helpers/quote_helper.dart';
 import 'package:quotes_app/modules/screens/quote_page/controller/bg_controller.dart';
 import 'package:quotes_app/modules/screens/quote_page/controller/font_controller.dart';
 import 'package:quotes_app/modules/screens/quote_page/model/bg_model.dart';
 import 'package:quotes_app/modules/screens/quote_page/model/font_model.dart';
+import 'package:quotes_app/modules/screens/quote_page/model/quote_model.dart';
 import 'package:quotes_app/modules/utils/fonts.dart';
 
 class QuoteScreen extends StatelessWidget {
@@ -75,7 +78,15 @@ class QuoteScreen extends StatelessWidget {
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    QuoteModel quote = QuoteModel(
+                                      quote: snapshot.data![index].quote,
+                                      category: snapshot.data![index].category,
+                                    );
+                                    int? res = await DBHelper.dbHelper
+                                        .insertQuote(m_quote: quote);
+                                    log("$res}");
+                                  },
                                   icon: const Icon(
                                     Icons.favorite_border,
                                     size: 28,
@@ -101,19 +112,6 @@ class QuoteScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                height: h / 18,
-                width: w / 4,
-                child: FloatingActionButton.extended(
-                  onPressed: () {},
-                  elevation: 0,
-                  icon: const Icon(
-                    Icons.category,
-                    size: 18,
-                  ),
-                  label: const Text("Category"),
-                ),
-              ),
               SizedBox(
                 height: h / 18,
                 width: w / 8,
@@ -224,57 +222,6 @@ class QuoteScreen extends StatelessWidget {
                               SizedBox(
                                 height: h / 30,
                               ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  "BACKGROUND COLOR",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: allFonts.length,
-                                  itemBuilder: (context, index) {
-                                    List<FontModel> fonts = allFonts
-                                        .map((e) =>
-                                            FontModel.fromGoogle(data: e))
-                                        .toList();
-                                    return GestureDetector(
-                                      onTap: () {
-                                        fontController
-                                            .changeFont(fonts[index].font);
-                                        Get.back();
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.all(5),
-                                        height: h / 100,
-                                        width: w / 5,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          border: Border.all(
-                                            width: 2,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          "Abc",
-                                          style: GoogleFonts.getFont(
-                                            fonts[index].font,
-                                            fontSize: 26,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                height: h / 200,
-                              ),
                             ],
                           ),
                         );
@@ -282,9 +229,23 @@ class QuoteScreen extends StatelessWidget {
                     );
                   },
                   elevation: 0,
-                  child: const Icon(
-                    Icons.format_paint_outlined,
-                    size: 18,
+                  child: const Image(
+                    image: AssetImage('lib/assets/edit-black.png'),
+                    height: 25,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: h / 18,
+                width: w / 8,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Get.toNamed('/fav');
+                  },
+                  elevation: 0,
+                  child: const Image(
+                    image: AssetImage("lib/assets/save-dark.png"),
+                    height: 25,
                   ),
                 ),
               ),
