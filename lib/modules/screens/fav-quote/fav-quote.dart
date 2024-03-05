@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
 import 'package:quotes_app/modules/helpers/db_helper.dart';
 import 'package:quotes_app/modules/utils/fonts.dart';
@@ -59,15 +63,16 @@ class _FavQuoteState extends State<FavQuote> {
                       Row(
                         children: [
                           IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.share),
+                            onPressed: () {
+                              _copyToClipboard(snapshot.data![index].quote);
+                            },
+                            icon: const Icon(Icons.copy),
                           ),
                           IconButton(
-                            onPressed: () async {
-                              await DBHelper.dbHelper.deleteStudentData(index);
-                              setState(() {});
+                            onPressed: () {
+                              _shareQupte(snapshot.data![index].quote);
                             },
-                            icon: const Icon(Icons.delete_outline),
+                            icon: const Icon(Icons.share),
                           ),
                         ],
                       ),
@@ -83,5 +88,23 @@ class _FavQuoteState extends State<FavQuote> {
         },
       ),
     );
+  }
+
+  void _copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Quote copied to clipboard"),
+      ),
+    );
+  }
+
+  void _shareQupte(String quote) async {
+    try {
+      await FlutterShare.share(
+          title: 'Share Quote', text: quote, chooserTitle: 'Share via');
+    } catch (e) {
+      log('Error sharing : $e');
+    }
   }
 }
