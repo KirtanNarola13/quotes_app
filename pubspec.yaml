@@ -41,6 +41,8 @@ dependencies:
   sqflite:
   path:
   flutter_share:
+  lottie:
+
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - lib/assets/
+    - lib/json/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
