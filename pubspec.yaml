@@ -42,6 +42,8 @@ dependencies:
   path:
   flutter_share:
   lottie:
+  flutter_card_swiper:
+  flutter_svg:
 
 
 dev_dependencies:

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quotes_app/modules/helpers/db_helper.dart';
@@ -27,82 +28,99 @@ class QuoteScreen extends StatelessWidget {
       children: [
         GetBuilder<BgController>(
           builder: (controller) {
-            return Scaffold(
-              backgroundColor: Color(int.parse(bgController.bgModel.bgColor)),
-              body: FutureBuilder(
-                future: QuoteHelper.quoteHelper.fetchData(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text("${snapshot.error}"),
-                    );
-                  } else if (snapshot.hasData) {
-                    return PageView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              height: h / 50,
-                            ),
-                            GetBuilder<FontController>(
-                              builder: (controller) {
-                                return Container(
-                                  color: Colors.transparent,
-                                  alignment: Alignment.center,
-                                  padding: const EdgeInsets.all(20),
-                                  height: h / 2,
-                                  child: Text(
-                                    snapshot.data![index].quote,
-                                    style: GoogleFonts.getFont(
-                                      fontController.fontModel.font,
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: 2,
+            return Container(
+              color: Colors.white,
+              child: Scaffold(
+                backgroundColor: Color(
+                  int.parse(bgController.bgModel.bgColor),
+                ).withOpacity(0.5),
+                body: FutureBuilder(
+                  future: QuoteHelper.quoteHelper.fetchData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text("${snapshot.error}"),
+                      );
+                    } else if (snapshot.hasData) {
+                      return CardSwiper(
+                        backCardOffset: Offset(0, 100),
+                        isLoop: true,
+                        scale: 0.5,
+                        cardsCount: snapshot.data!.length,
+                        cardBuilder: (context, index, _, __) {
+                          return Center(
+                            child: Container(
+                              height: h / 1.7,
+                              decoration: BoxDecoration(
+                                  color: Color(
+                                    int.parse(
+                                      bgController.bgModel.bgColor,
                                     ),
-                                    textAlign: TextAlign.center,
+                                  ).withOpacity(0.9),
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    width: 3,
+                                    color: Color(
+                                      int.parse(bgController.bgModel.bgColor),
+                                    ),
+                                  )),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.all(20),
+                                    height: h / 2,
+                                    child: Text(
+                                      snapshot.data![index].quote,
+                                      style: GoogleFonts.getFont(
+                                        fontController.fontModel.font,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        letterSpacing: 2,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
-                                );
-                              },
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.ios_share_rounded,
+                                          size: 28,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () async {
+                                          QuoteModel quote = QuoteModel(
+                                            quote: snapshot.data![index].quote,
+                                            category:
+                                                snapshot.data![index].category,
+                                          );
+                                          int? res = await DBHelper.dbHelper
+                                              .insertQuote(m_quote: quote);
+                                          log("$res}");
+                                        },
+                                        icon: const Icon(
+                                          Icons.favorite_border,
+                                          size: 28,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.ios_share_rounded,
-                                    size: 28,
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () async {
-                                    QuoteModel quote = QuoteModel(
-                                      quote: snapshot.data![index].quote,
-                                      category: snapshot.data![index].category,
-                                    );
-                                    int? res = await DBHelper.dbHelper
-                                        .insertQuote(m_quote: quote);
-                                    log("$res}");
-                                  },
-                                  icon: const Icon(
-                                    Icons.favorite_border,
-                                    size: 28,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        );
-                      },
+                          );
+                        },
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
+                  },
+                ),
               ),
             );
           },
