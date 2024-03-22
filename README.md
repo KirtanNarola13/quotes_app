@@ -59,8 +59,12 @@
   ==================================SCREEN SHOTS=====================================
 
   <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/131cc409-26d8-49cc-81b1-ed6238848f47" width="250">
-  <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/6fb26e06-171d-451b-8fd8-a3f47b68b1a7" width="250">
-  <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/9ee547ad-2d68-410c-888e-aa1e6878c68d" width="250">
+  <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/ad562cb0-4dc0-4993-9432-b4c6a9b30d9a" width="250">
+  <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/1e9f6523-aa24-48a2-86cd-7912f0753405" width="250">
+  <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/2824b8c6-35bd-4a06-a909-3ef34e19bac9" width="250">
+  <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/770bf47f-7f16-484b-a28d-b0635bf1e26a" width="250">
+  <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/d48c36cd-6f58-4d23-952d-b48fabfc91a6" width="250">
+  <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/2ad50ea3-ed96-4fe0-ae7d-4733970802e9" width="250">
   <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/6da51fc7-f866-4387-b80d-4ed97ab9937c" width="250">
   <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/47310ee7-fafe-4a2b-9b13-3fbedb4fe9de" width="250">
   <img src="https://github.com/KirtanNarola13/quotes_app/assets/133342879/805121b5-7d71-4c39-b070-98c39d2b2e42" width="250">
